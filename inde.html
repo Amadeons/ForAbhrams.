@@ -1,0 +1,139 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Leading Me To You</title>
+  <link rel="stylesheet" href="okoknyahtml.css">
+</head>
+
+<body>
+
+  <main class="stage">
+
+    <div class="envelope" id="envelope">
+
+      <div class="envelope-back"></div>
+
+      <article class="letter" id="letter">
+
+        <p>Every part of me seems to have been saving a seat for you long before I knew you. Something far beyond what the world has ever understood such things to be, or what people have typically invented to give meaning to belonging. Yet have I ever told you, ...? This reality could never be a punishment. I remember offering you the last piece of me that still chose to bleed, knowing you probably always had an appetite for its warmth. You told me that sacrifice could never be mistaken for a promise to stay awhile longer because neither of us knew when enough had become more than we knew how to forgive. We believed in each other with the recklessness of two people who had nowhere else left to put their faith. And God, what wouldn’t I give to have my days beside yours, ...? I want to learn the language of your silences until I no longer hear absence where there’s only quiet, and after chasing every answer about the familiarity of love, what I really, desperately want is to come home and find you there.</p>
+
+        <p class="signoff">
+          With all my Love, Jadda.
+        </p>
+
+      </article>
+      <figure class="polaroid" id="polaroid">
+
+        <div class="photo-slot">
+          <img
+            src="changmae.jpg"
+          >
+        </div>
+
+      </figure>
+      <div class="envelope-front"></div>
+      <div class="envelope-flap" id="flap"></div>
+
+    </div>
+
+  </main>
+
+  <!-- Background Music -->
+  <audio id="music" autoplay loop preload="auto">
+    <source src="stars burn out - cykim.mp3" type="audio/mpeg">
+  </audio>
+  <script>
+    const envelope = document.getElementById("envelope");
+    const flap = document.getElementById("flap");
+    const letter = document.getElementById("letter");
+    const polaroid = document.getElementById("polaroid");
+    const music = document.getElementById("music");
+
+    let isOpen = false;
+    let isAnimating = false;
+
+    const sleep = (ms) =>
+      new Promise(resolve => setTimeout(resolve, ms));
+
+    // OPEN ENVELOPE
+    async function openEnvelope() {
+      isAnimating = true;
+
+      flap.classList.add("is-open");
+      await sleep(850);
+
+      letter.classList.add("is-out");
+      await sleep(750);
+
+      polaroid.classList.add("is-out");
+      await sleep(1000);
+
+      isOpen = true;
+      isAnimating = false;
+    }
+
+    // CLOSE ENVELOPE
+    async function closeEnvelope() {
+      isAnimating = true;
+
+      polaroid.classList.remove("is-out");
+      await sleep(500);
+
+      letter.classList.remove("is-out");
+      await sleep(850);
+
+      flap.classList.remove("is-open");
+      await sleep(1000);
+
+      isOpen = false;
+      isAnimating = false;
+    }
+
+    // CLICK TO OPEN / CLOSE
+    envelope.addEventListener("click", async () => {
+
+      if (isAnimating) return;
+
+      if (isOpen) {
+        await closeEnvelope();
+      } else {
+        await openEnvelope();
+      }
+
+    });
+
+    // KEEP LETTER INTERACTION INDEPENDENT
+    letter.addEventListener("click", (event) => {
+      event.stopPropagation();
+    });
+
+    async function startMusic() {
+
+      if (!music.paused) return;
+
+      try {
+        await music.play();
+      } catch (error) {
+        console.log("Music requires user interaction.");
+      }
+
+    }
+
+    startMusic();
+
+    document.addEventListener("pointerdown", startMusic, {
+      once: true
+    });
+
+    document.addEventListener("keydown", startMusic, {
+      once: true
+    });
+
+  </script>
+
+</body>
+</html>
